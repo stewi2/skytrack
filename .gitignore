@@ -1,0 +1,6 @@
+.venv
+db.sqlite3
+de421.bsp
+gp.php
+*.iml
+.idea
