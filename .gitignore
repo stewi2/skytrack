@@ -4,3 +4,6 @@ de421.bsp
 gp.php
 *.iml
 .idea
+.vscode
+launch.json
+__pycache__

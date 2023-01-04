@@ -1,72 +1,68 @@
 <!DOCTYPE html>
 {% extends "satellites/base.html" %}
-{% block title %} Satellite List {% endblock %}
+{% block title %} Satellite Details for {{satellite.name}} {% endblock %}
 {% block content %}
-
-{{ events |json_script:'eventdata' }}
 
 <h3>{{events | length }} events for {{satellite.name}} between {{t0 | date:"SHORT_DATE_FORMAT"}} and {{t1 | date:"SHORT_DATE_FORMAT"}}</h3>
 
-<table id="details" class="display">
-  <thead>
-    <tr>
-      <th scope="col">timestamp</th>
-      <th scope="col">event</th>
-      <th scope="col">alt</th>
-      <th scope="col">az</th>
-      <th scope="col">ra</th>
-      <th scope="col">dec</th>
-      <th scope="col">sunlit?</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for event in events %}
-    <tr>
-      <th scope="row">{{event.timestamp | date:"SHORT_DATETIME_FORMAT"}}</th>
-      <td>{{event.event}}</td>
-      <td>{{event.alt | floatformat}}</td>
-      <td>{{event.az | floatformat}}</td>
-      <td>{{event.ra | floatformat}}</td>
-      <td>{{event.dec | floatformat}}</td>
-      <td>{{event.is_sunlit}}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<table id="details" class="display"></table>
 
 <div id="container" style="width:100%; height:400px;"></div>
 
+{{ events | json_script:'eventdata' }}
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  $("#details").dataTable({ ordering: false });
-})
 
 const events = JSON.parse(document.getElementById('eventdata').textContent);
 
-const chart = Highcharts.chart('container', {
-    chart: {
-        type: 'spline'
-    },
-    title: {
-      text: 'Peak Altitudes',
-    },
-    xAxis: {
-      title: {
-        text: 'Date'
+document.addEventListener('DOMContentLoaded', function () {
+
+  $(document).ready(function () {
+    $('#details').DataTable({
+        data: events.map((x) => { return [
+          x.timestamp, x.event,
+          Math.round(x.alt*10)/10, Math.round(x.az*10)/10,
+          Math.round(x.ra*10)/10, Math.round(x.dec*10)/10,
+          x.is_sunlit,
+        ]; }),
+        columns: [
+            { title: 'timestamp' },
+            { title: 'event' },
+            { title: 'alt' },
+            { title: 'az' },
+            { title: 'ra' },
+            { title: 'dec' },
+            { title: 'sunlit?' },
+        ],
+        ordering: false,
+    });
+  });
+
+  const chart = Highcharts.chart('container', {
+      chart: {
+          type: 'spline'
       },
-      type: 'datetime'
-    },
-    yAxis: {
       title: {
-        text: 'Altitude (degrees)'
-      }
-    },
-    series:
-      [{ name: 'alt',
-         data: events
-                  .filter((x) => { return x.event == 'peak' })
-                  .map((x) => { return [x.timestamp, Math.round(x.alt*10)/10]; })}]
-});
+        text: 'Peak Altitudes',
+      },
+      xAxis: {
+        title: {
+          text: 'Date'
+        },
+        type: 'datetime'
+      },
+      yAxis: {
+        title: {
+          text: 'Altitude (degrees)'
+        }
+      },
+      series:
+        [{ name: 'alt',
+          data: events
+                    .filter((x) => { return x.event == 'peak' })
+                    .map((x) => { return [x.timestamp, Math.round(x.alt*10)/10]; })}]
+  });
+})
 </script>
 
 {% endblock %}
