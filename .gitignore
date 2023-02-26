@@ -7,3 +7,5 @@ gp.php
 .vscode
 launch.json
 __pycache__
+node_modules
+starlink.txt

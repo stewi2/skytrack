@@ -1,0 +1,18 @@
+{% extends "satellites/base.html" %}
+{% block title %}Pass Predictions{% endblock %}
+{% block content %}
+
+<h3>Pass predictions between {{t0 | time}} and {{t1 | time}}</h3>
+
+<table id="predictions" class="table table-striped nowrap" style="width:100%;">
+</table>
+
+<script type="module">
+  import { createPredictionsTable } from '/static/scripts/main.js';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    createPredictionsTable("#predictions",  {{ visible_only | lower }});
+  });
+</script>
+
+{% endblock %}

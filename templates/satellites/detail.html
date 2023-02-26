@@ -1,46 +1,35 @@
-<!DOCTYPE html>
 {% extends "satellites/base.html" %}
-{% block title %} Satellite Details for {{satellite.name}} {% endblock %}
+{% block title %}Passes for {{satellite.name}}{% endblock %}
 {% block content %}
 
-<h3>{{events | length }} events for {{satellite.name}} between {{t0 | date:"SHORT_DATE_FORMAT"}} and {{t1 | date:"SHORT_DATE_FORMAT"}}</h3>
+<h3>Pass predictions for {{satellite.name}} between {{t0 | date:"SHORT_DATE_FORMAT"}} and {{t1 | date:"SHORT_DATE_FORMAT"}}</h3>
 
-<table id="details" class="display"></table>
+<table id="details" class="table table-striped compact nowrap">
+</table>
 
-<div id="container" style="width:100%; height:400px;"></div>
+<!--
+<div id="alt_graph" style="width:100%; height:400px;">
+</div>
 
-{{ events | json_script:'eventdata' }}
+<div id="az_graph" style="width:100%; height:400px;">
+</div>
+-->
+
+<script type="module">
+  import { createPassListTable } from '/static/scripts/main.js';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    createPassListTable("#details", {{ satellite.model.satnum }}, {{ visible_only | lower }} );
+  });
+</script>
+
 
 <script>
 
-const events = JSON.parse(document.getElementById('eventdata').textContent);
-
-document.addEventListener('DOMContentLoaded', function () {
-
-  $(document).ready(function () {
-    $('#details').DataTable({
-        data: events.map((x) => { return [
-          x.timestamp, x.event,
-          Math.round(x.alt*10)/10, Math.round(x.az*10)/10,
-          Math.round(x.ra*10)/10, Math.round(x.dec*10)/10,
-          x.is_sunlit,
-        ]; }),
-        columns: [
-            { title: 'timestamp' },
-            { title: 'event' },
-            { title: 'alt' },
-            { title: 'az' },
-            { title: 'ra' },
-            { title: 'dec' },
-            { title: 'sunlit?' },
-        ],
-        ordering: false,
-    });
-  });
-
-  const chart = Highcharts.chart('container', {
+/*
+  const alt_chart = Highcharts.chart('alt_graph', {
       chart: {
-          type: 'spline'
+          type: 'column'
       },
       title: {
         text: 'Peak Altitudes',
@@ -59,10 +48,49 @@ document.addEventListener('DOMContentLoaded', function () {
       series:
         [{ name: 'alt',
           data: events
-                    .filter((x) => { return x.event == 'peak' })
-                    .map((x) => { return [x.timestamp, Math.round(x.alt*10)/10]; })}]
+                    .map((x) => {
+                      return {
+                        x: Date.parse(x['peak'].timestamp),
+                        y: Math.round(x['peak'].alt*10)/10,
+                        color: x['peak'].is_sunlit ? 'blue': 'grey',
+                        marker: { enabled: true },
+                      };
+                    })
+        }]
   });
-})
+
+  const az_chart = Highcharts.chart('az_graph', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+        text: 'Azimuth at Peak',
+      },
+      xAxis: {
+        title: {
+          text: 'Date'
+        },
+        type: 'datetime'
+      },
+      yAxis: {
+        title: {
+          text: 'Azimuth (degrees)'
+        }
+      },
+      series:
+        [{ name: 'azimuth',
+          data: events
+                    .map((x) => {
+                      return {
+                        x: Date.parse(x['peak'].timestamp),
+                        y: Math.round(x['peak'].az*10)/10,
+                        color: x['peak'].is_sunlit ? 'blue': 'grey',
+                        marker: { enabled: true },
+                      };
+                    })
+        }]
+  });
+*/
 </script>
 
 {% endblock %}

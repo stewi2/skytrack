@@ -14,13 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls import include
+from django.urls import path, include
 from satellites import views
+from rest_framework import routers
 
 urlpatterns = [
     path('', views.home, name="satellites"),
+    path('predictions', views.predictions, name="predictions"),
     path('detail/<int:id>', views.detail, name="detail"),
-    path('admin/', admin.site.urls)
-
+    path('pass/<int:id>', views.pass_timeline, name="pass"),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/satellites', views.get_satellites, name="satellites"),
+    path('api/satellites/<int:id>/passes', views.get_passes, name="passes"),
+    path('api/satellites/<int:id>/passes/<int:start>-<int:end>', views.get_pass_details, name="pass"),
+    path('api/satellites/predictions', views.get_predictions, name="predictions"),
 ]

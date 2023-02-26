@@ -1,35 +1,20 @@
-<!DOCTYPE html>
 {% extends "satellites/base.html" %}
 
 {% block title %} Satellite List {% endblock %}
 
 {% block content %}
 
-<h3>{{ satellites | length }} Active Satellites</h3>
+<h3>Active Satellites</h3>
 
-<table id="satellites" class="display">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Name</th>
-      <th scope="col">Epoch</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for sat in satellites %}
-    <tr>
-      <th scope="row"><a href="detail/{{sat.model.satnum}}">{{sat.model.satnum}}</a></th>
-      <td>{{sat.name}}</td>
-      <td>{{sat.epoch.utc_datetime}}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
+<table id="satellites" class="table table-striped compact nowrap">
 </table>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    $("#satellites").dataTable();
-})
+<script type="module">
+  import { createSatelliteListTable } from '/static/scripts/main.js';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    createSatelliteListTable("#satellites");
+  });
 </script>
 
 {% endblock %}

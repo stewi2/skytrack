@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends "satellites/base.html" %}
+{% block title %} Pass Details for {{satellite.name}} at {{t0}} {% endblock %}
+{% block content %}
+
+<h3>Details for the pass of {{satellite.name}} on {{start | date:"SHORT_DATE_FORMAT"}} at {{start | time }}</h3>
+
+<table id="timeline" class="table table-striped nowrap">
+</table>
+
+<script type="module">
+  import { createPassDetailsTable } from '/static/scripts/main.js';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    createPassDetailsTable("#timeline", {{ satellite.model.satnum }}, "{{ start | date:'U' }}", "{{ end | date:'U' }}" );
+  });
+</script>
+
+{% endblock %}
