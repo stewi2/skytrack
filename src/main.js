@@ -194,5 +194,5 @@ export function createPredictionsTable(target, visible_only) {
     paging: false,
     info: false,
     responsive: true,
-});
+  });
 }
