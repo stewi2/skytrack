@@ -148,11 +148,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{asctime} {levelname} {module} {thread} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
+            'format': '{asctime} {levelname}s {module}s %(process)d {message}s',
             'style': '{',
         },
     },
@@ -165,5 +161,13 @@ LOGGING = {
     'root': {
         'handlers': ['console'],
         'level': 'INFO',
+    },
+    'django': {
+        'level': 'INFO',
+        'propagate': True,
+    },
+    'django.request': {
+        'level': 'INFO',
+        'propagate': True,
     },
 }
