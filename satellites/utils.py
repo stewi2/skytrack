@@ -12,7 +12,7 @@ stations_url = 'https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=
 
 logger = logging.getLogger(__name__)
 
-loader = Loader('/tmp', verbose=False)
+loader = Loader('.data', verbose=False)
 eph = loader('de421.bsp')
 
 ts = loader.timescale()
