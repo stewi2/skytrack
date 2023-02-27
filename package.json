@@ -1,7 +1,7 @@
 {
   "module": "static/scripts/main.js",
   "scripts": {
-    "build": "webpack --watch"
+    "build": "webpack"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
