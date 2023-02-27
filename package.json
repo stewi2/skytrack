@@ -14,6 +14,8 @@
     "datatables.net-plugins": "github:DataTables/Plugins",
     "datatables.net-responsive-bs5": "^2.4.0",
     "datatables.net-scroller-bs5": "^2.1.0",
+    "datatables.net-searchbuilder-bs5": "^1.4.0",
+    "datatables.net-searchpanes-bs5": "^2.1.1",
     "datatables.net-select-bs5": "^1.6.0",
     "jquery": "^3.6.3",
     "jszip": "^3.10.1",

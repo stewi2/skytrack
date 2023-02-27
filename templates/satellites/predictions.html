@@ -2,13 +2,18 @@
 {% block title %}Pass Predictions{% endblock %}
 {% block content %}
 
-<h3>Pass predictions between {{t0 | time}} and {{t1 | time}}</h3>
+<h3 id='header'></h3>
 
 <table id="predictions" class="table table-striped nowrap" style="width:100%;">
 </table>
 
 <script type="module">
   import { createPredictionsTable } from '/static/scripts/main.js';
+
+  const start = luxon.DateTime.fromISO('{{t0|date:"c"}}')
+  const end = luxon.DateTime.fromISO('{{t1|date:"c"}}')
+
+  $('#header').text('Pass predictions for 1 hour starting at ' + start.toLocaleString(luxon.DateTime.TIME_WITH_SHORT_OFFSET));
 
   document.addEventListener('DOMContentLoaded', function () {
     createPredictionsTable("#predictions",  {{ visible_only | lower }});

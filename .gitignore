@@ -9,3 +9,4 @@ launch.json
 __pycache__
 node_modules
 starlink.txt
+.ipynb_checkpoints

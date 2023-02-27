@@ -20,6 +20,7 @@ from rest_framework import routers
 
 urlpatterns = [
     path('', views.home, name="satellites"),
+    path('settings', views.settings, name="settings"),
     path('predictions', views.predictions, name="predictions"),
     path('detail/<int:id>', views.detail, name="detail"),
     path('pass/<int:id>', views.pass_timeline, name="pass"),

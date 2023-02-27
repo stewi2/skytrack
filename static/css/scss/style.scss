@@ -6,6 +6,11 @@ $font-family: sans-serif;
 @import "~/bootswatch/dist/zephyr/bootswatch";
 @import "~datatables.net-bs5/css/dataTables.bootstrap5";
 @import "~datatables.net-responsive-bs5/css/responsive.bootstrap5";
+@import "~datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5";
+@import "~datatables.net-searchpanes-bs5/css/searchpanes.bootstrap5";
+@import "~datatables.net-searchbuilder-bs5/css/searchbuilder.bootstrap5";
+@import "~datatables.net-select-bs5/css/select.bootstrap5";
+@import "~datatables.net-datetime/css/dataTables.datetime";
 
 .day {
     color: LightSkyBlue  !important;

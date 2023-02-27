@@ -2,95 +2,21 @@
 {% block title %}Passes for {{satellite.name}}{% endblock %}
 {% block content %}
 
-<h3>Pass predictions for {{satellite.name}} between {{t0 | date:"SHORT_DATE_FORMAT"}} and {{t1 | date:"SHORT_DATE_FORMAT"}}</h3>
+<h3 id='header'></h3>
 
 <table id="details" class="table table-striped compact nowrap">
 </table>
-
-<!--
-<div id="alt_graph" style="width:100%; height:400px;">
-</div>
-
-<div id="az_graph" style="width:100%; height:400px;">
-</div>
--->
 
 <script type="module">
   import { createPassListTable } from '/static/scripts/main.js';
 
   document.addEventListener('DOMContentLoaded', function () {
+    const from = luxon.DateTime.fromISO('{{t0|date:"c"}}');
+    const to = luxon.DateTime.fromISO('{{t1|date:"c"}}');
+    $('#header').text('Pass predictions for {{satellite.name}} between ' + from.toLocaleString(luxon.DateTime.DATE_SHORT) + ' and ' + to.toLocaleString(luxon.DateTime.DATE_SHORT) );
+
     createPassListTable("#details", {{ satellite.model.satnum }}, {{ visible_only | lower }} );
   });
-</script>
-
-
-<script>
-
-/*
-  const alt_chart = Highcharts.chart('alt_graph', {
-      chart: {
-          type: 'column'
-      },
-      title: {
-        text: 'Peak Altitudes',
-      },
-      xAxis: {
-        title: {
-          text: 'Date'
-        },
-        type: 'datetime'
-      },
-      yAxis: {
-        title: {
-          text: 'Altitude (degrees)'
-        }
-      },
-      series:
-        [{ name: 'alt',
-          data: events
-                    .map((x) => {
-                      return {
-                        x: Date.parse(x['peak'].timestamp),
-                        y: Math.round(x['peak'].alt*10)/10,
-                        color: x['peak'].is_sunlit ? 'blue': 'grey',
-                        marker: { enabled: true },
-                      };
-                    })
-        }]
-  });
-
-  const az_chart = Highcharts.chart('az_graph', {
-      chart: {
-          type: 'column'
-      },
-      title: {
-        text: 'Azimuth at Peak',
-      },
-      xAxis: {
-        title: {
-          text: 'Date'
-        },
-        type: 'datetime'
-      },
-      yAxis: {
-        title: {
-          text: 'Azimuth (degrees)'
-        }
-      },
-      series:
-        [{ name: 'azimuth',
-          data: events
-                    .map((x) => {
-                      return {
-                        x: Date.parse(x['peak'].timestamp),
-                        y: Math.round(x['peak'].az*10)/10,
-                        color: x['peak'].is_sunlit ? 'blue': 'grey',
-                        marker: { enabled: true },
-                      };
-                    })
-        }]
-  });
-*/
 </script>
 
 {% endblock %}
