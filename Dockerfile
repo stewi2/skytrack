@@ -20,6 +20,6 @@ RUN npm run build
 # export assets
 RUN python manage.py collectstatic
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD python manage.py migrate && gunicorn ephem.wsgi -b 0:8000 --workers=10 --access-logfile - --timeout 0
+CMD python manage.py migrate && gunicorn ephem.wsgi -b 0:8080 --workers=10 --access-logfile - --timeout 0
