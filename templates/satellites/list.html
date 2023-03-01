@@ -4,17 +4,17 @@
 
 {% block content %}
 
-<h5>Active Satellites</h5>
-
-<table id="satellites" class="table table-striped compact nowrap">
-</table>
-
 <script type="module">
-  import { createSatelliteListTable } from '/static/scripts/main.js';
+  import { createSatelliteListTable } from '/static/scripts/main.mjs';
 
   document.addEventListener('DOMContentLoaded', function () {
     createSatelliteListTable("#satellites");
   });
 </script>
+
+<h5>Active Satellites</h5>
+
+<table id="satellites" class="table table-striped compact nowrap">
+</table>
 
 {% endblock %}

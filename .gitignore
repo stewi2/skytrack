@@ -1,12 +1,9 @@
 .venv
-db.sqlite3
-de421.bsp
-gp.php
+.data
 *.iml
 .idea
 .vscode
 launch.json
 __pycache__
 node_modules
-starlink.txt
 .ipynb_checkpoints

@@ -31,9 +31,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-mbv$8^_f&=d90v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['web-production-eb35.up.railway.app', 'localhost', '192.168.1.211']
+ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-eb35.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-eb35.up.railway.app', 'https://ephem-4tk4fwulta-ue.a.run.app']
 
 # Application definition
 
@@ -93,7 +93,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / '.data' / 'db.sqlite3',
     }
 }
 
@@ -161,6 +161,10 @@ LOGGING = {
     'root': {
         'handlers': ['console'],
         'level': 'INFO',
+    },
+    'satellites.utils': {
+        'level': 'DEBUG',
+        'propagate': True,    
     },
     'django': {
         'level': 'INFO',

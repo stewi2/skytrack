@@ -1,13 +1,12 @@
+import './style/style.scss';
+
 import 'jquery';
 import 'bootstrap';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-scroller-bs5';
 import 'datatables.net-fixedheader-bs5';
-import 'datatables.net-searchbuilder-bs5';
-import 'datatables.net-searchpanes-bs5';
 import 'datatables.net-select-bs5';
-import 'datatables.net-datetime';
 
 require('./hyperLink.js');
 window.luxon = require('luxon');
