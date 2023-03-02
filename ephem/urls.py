@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from satellites import views
 from rest_framework import routers
+from django.conf import settings
 
 urlpatterns = [
     path('', views.home, name="satellites"),
@@ -24,10 +25,12 @@ urlpatterns = [
     path('predictions', views.predictions, name="predictions"),
     path('detail/<int:id>', views.detail, name="detail"),
     path('pass/<int:id>', views.pass_timeline, name="pass"),
-    path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/satellites', views.get_satellites, name="satellites"),
     path('api/satellites/<int:id>/passes', views.get_passes, name="passes"),
     path('api/satellites/<int:id>/passes/<int:start>-<int:end>', views.get_pass_details, name="pass"),
     path('api/satellites/predictions', views.get_predictions, name="predictions"),
 ]
+
+if settings.ADMIN_ENABLED is True:
+    urlpatterns += [path('admin/', admin.site.urls),]

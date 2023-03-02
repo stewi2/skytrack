@@ -38,7 +38,6 @@ CSRF_TRUSTED_ORIGINS = ['https://web-production-eb35.up.railway.app', 'https://e
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,6 +46,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'satellites'
 ]
+
+ADMIN_ENABLED = os.environ.get('ADMIN_ENABLED', '') != 'False'
+
+if ADMIN_ENABLED is True:
+    INSTALLED_APPS.append('django.contrib.admin')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
