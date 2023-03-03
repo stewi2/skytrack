@@ -3,7 +3,7 @@ steps:
     args:
       - pull
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:latest'
-    id: Push
+    id: Pull
   - name: gcr.io/cloud-builders/docker
     args:
       - build
