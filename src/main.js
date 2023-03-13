@@ -61,6 +61,9 @@ export function createSatelliteListTable(target) {
         responsivePriority: 1
       },
     ],
+    language: {
+      loadingRecords: '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>'
+    },
     responsive: true,
     fixedHeader: false,
     deferRender: true,
@@ -162,63 +165,89 @@ export function createPassDetailsTable(target, satnum, start, end) {
   });
 }
 
-export function createPredictionsTable(target, visible_only) {
-  $(target).DataTable({
-    ajax: {
-      url: "/api/satellites/predictions?visible_only=" + visible_only,
-    },
-    columns: [
-      { title: 'satellite', data: 'satellite.name', responsivePriority: 1 },
-      { title: 'NORAD ID', data: 'satellite.id', responsivePriority: 4 },
-      { title: 'rise', data: 'rise.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
-      { title: 'peak', data: 'peak.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, order: 'asc', responsivePriority: 1 },
-      { title: 'set', data: 'set.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
-      { title: 'peak alt', data: 'peak.alt', render: DataTable.render.number(null,null,0,null,'°'), searchable: false, responsivePriority: 2 },
-      { title: 'peak az', data: 'peak.az', render: DataTable.render.number(null,null,0,null,'°'), searchable: false, responsivePriority: 3 },
-      { title: 'peak ra/dec',
-        data: function ( row, type, set, meta ) {
-          return row.peak.ra + ' / ' + row.peak.dec;
+export function createPredictionsTable(target, group, start_time, duration, visible_only) {
+  if ( $.fn.dataTable.isDataTable( target ) ) {
+    $(target).DataTable().clear().draw().ajax.url(
+      "/api/satellites/predictions?group=" + group +
+      "&start=" + start_time.ts/1000 +
+      "&duration=" +duration +
+      "&visible_only=" + visible_only
+    ).load();
+  } else {
+    $(target).DataTable({
+      ajax: {
+        url: "/api/satellites/predictions?group=" + group +
+        "&start=" + start_time.ts/1000 +
+        "&duration=" +duration +
+        "&visible_only=" + visible_only,
+        beforeSend: function(){
+          // Here, manually add the loading message.
+          $('#predictions > tbody').html(
+            '<tr class="odd">' +
+              '<td valign="top" colspan=12 class="dataTables_empty">' +
+                '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>' +
+              '</td>' +
+            '</tr>'
+          );
         },
-        searchable: false,
-        responsivePriority: 4
       },
-      { title: 'sunlit',
-        data: 'peak.is_sunlit',
-        render: function ( val, type, row ) { return val?'yes':'no' },
-        searchable: false,
-        responsivePriority: 4
-      },
-      { title: 'time of day',
-        data: 'rise.time_of_day', 
-        createdCell: function ( td, data, row, row_index, col_index ) {
-          $(td).addClass(tod_classes[data]);
+      columns: [
+        { title: 'satellite', data: 'satellite.name', responsivePriority: 1 },
+        { title: 'NORAD ID', data: 'satellite.id', responsivePriority: 4 },
+        { title: 'rise', data: 'rise.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
+        { title: 'peak', data: 'peak.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, order: 'asc', responsivePriority: 1 },
+        { title: 'set', data: 'set.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
+        { title: 'peak alt', data: 'peak.alt', render: DataTable.render.number(null,null,0,null,'°'), searchable: false, responsivePriority: 2 },
+        { title: 'peak az', data: 'peak.az', render: DataTable.render.number(null,null,0,null,'°'), searchable: false, responsivePriority: 3 },
+        { title: 'peak ra/dec',
+          data: function ( row, type, set, meta ) {
+            return row.peak.ra + ' / ' + row.peak.dec;
+          },
+          searchable: false,
+          responsivePriority: 4
         },
-        searchable: false,
-        responsivePriority: 4
-      },
-      { data: function ( row, type, set, meta ) {
+        { title: 'sunlit',
+          data: 'peak.is_sunlit',
+          render: function ( val, type, row ) { return val?'yes':'no' },
+          searchable: false,
+          responsivePriority: 4
+        },
+        { title: 'time of day',
+          data: 'rise.time_of_day', 
+          createdCell: function ( td, data, row, row_index, col_index ) {
+            $(td).addClass(tod_classes[data]);
+          },
+          searchable: false,
+          responsivePriority: 4
+        },
+        { data: function ( row, type, set, meta ) {
+            return generate_unistellar_uri(row.peak.ra_deg, row.peak.dec_deg, new Date(row.peak.timestamp));
+          },
+          render: $.fn.dataTable.render.hyperLink('<img src="/static/img/parabola.svg" width=16 height=16 />'),
+          orderable: false,
+          searchable: false,
+          responsivePriority: 1,
+        },
+        { data: function ( row, type, set, meta ) {
           return generate_unistellar_uri(row.peak.ra_deg, row.peak.dec_deg, new Date(row.peak.timestamp));
-        },
-        render: $.fn.dataTable.render.hyperLink('<img src="/static/img/parabola.svg" width=16 height=16 />'),
-        orderable: false,
-        searchable: false,
-        responsivePriority: 1,
+          },
+          render: $.fn.dataTable.render.hyperLink('<img src="/static/img/telescope.svg" width=16 height=16 />'),
+          orderable: false,
+          searchable: false,
+          responsivePriority: 1
+        }
+      ],
+      language: {
+        loadingRecords: '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>',
+        emptyTable: "No matching passes found",
       },
-      { data: function ( row, type, set, meta ) {
-        return generate_unistellar_uri(row.peak.ra_deg, row.peak.dec_deg, new Date(row.peak.timestamp));
-        },
-        render: $.fn.dataTable.render.hyperLink('<img src="/static/img/telescope.svg" width=16 height=16 />'),
-        orderable: false,
-        searchable: false,
-        responsivePriority: 1
-      }
-    ],
-    orderFixed: [ 3, 'asc' ],
-    ordering: false,
-    searching: true,
-    paging: false,
-    info: false,
-    responsive: true,
-    fixedHeader: false,
-  });
+      orderFixed: [ 3, 'asc' ],
+      ordering: false,
+      searching: true,
+      paging: false,
+      info: false,
+      responsive: true,
+      fixedHeader: false,
+    });
+  }
 }

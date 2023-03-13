@@ -20,6 +20,7 @@
   import '/static/scripts/main.mjs';
 
   document.getElementById('geolocate').addEventListener("click", function() {
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -28,6 +29,11 @@
         },
         error => {
           alert("Geolocation failure: " + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
         }
       );
     } else {

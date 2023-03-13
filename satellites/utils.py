@@ -7,8 +7,22 @@ from datetime import datetime
 import math
 import logging
 
-stations_url = 'https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle'
-#stations_url = 'https://www.celestrak.com/NORAD/elements/supplemental/starlink.txt'
+stations_urls = [
+    ('NORAD',            'https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle'),
+    ('Starlink',         'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=starlink&FORMAT=tle'),
+    ('OneWeb',           'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=oneweb&FORMAT=tle'),
+    ('Planet',           'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=planet&FORMAT=tle'),
+    ('Iridium',          'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=iridium&FORMAT=tle'),
+    ('GPS',              'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=gps&FORMAT=tle'),
+    ('GLONASS',          'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=glonass&FORMAT=tle'),
+    ('Meteosat',         'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=meteosat&FORMAT=tle'),
+    ('Intelsat',         'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=intelsat&FORMAT=tle'),
+    ('SES',              'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=ses&FORMAT=tle'),
+    ('Telesat',          'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=telesat&FORMAT=tle'),
+    ('Orbcomm',          'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=orbcomm&FORMAT=tle'),
+    ('ISS',              'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=iss&FORMAT=tle'),
+    ('AST Space Mobile', 'https://celestrak.org/NORAD/elements/supplemental/sup-gp.php?FILE=ast&FORMAT=tle')
+]
 
 logger = logging.getLogger(__name__)
 
@@ -17,17 +31,20 @@ eph = loader('de421.bsp')
 
 ts = loader.timescale()
 
-satellites = None
-satellites_by_id = None
+satellites = {}
+satellites_by_id = {}
 
 def update_tle():
-    global satellites
-    global satellites_by_id
+    for group, url in stations_urls:
+        filename = group + ".txt"
+        if group not in satellites:
+            if not loader._exists(filename) or loader.days_old(filename) > 1:
+                logger.info(f"Downloading latest TLEs for {group} from {url} {loader.days_old(filename)}")
+                satellites[group] = loader.tle_file(url, reload=True, filename=filename)
+            else:
+                satellites[group] = loader.tle_file(url, reload=False, filename=filename)
 
-    if not satellites or not loader._exists('stations.txt') or loader.days_old('stations.txt') > 1:
-        logger.info("Downloading latest TLEs")
-        satellites = loader.tle_file(stations_url, reload=True, filename='stations.txt')
-        satellites_by_id = {sat.model.satnum: sat for sat in satellites}    
+            satellites_by_id[group] = {sat.model.satnum: sat for sat in satellites[group]}
 
 def event_data(t, event, satellite, eph, difference, tod):
     name = ('rise', 'peak', 'set')[event]
@@ -49,15 +66,22 @@ def event_data(t, event, satellite, eph, difference, tod):
         'time_of_day': almanac.TWILIGHTS[tod(t).item(0)]
     }
 
-def get_all_satellites() -> list[EarthSatellite]:
+def get_all_groups() -> list[str]:
     update_tle()
-    return satellites
+    return satellites.keys()
 
-def get_satellite(sat_id: str) -> EarthSatellite:
+def get_all_satellites(group: str) -> list[EarthSatellite]:
     update_tle()
-    return satellites_by_id[sat_id]
+    if group not in satellites:
+        raise ValueError(f"Unknown group {group}")
+    
+    return satellites[group]
 
-def get_satellite_passes(sat_ids: list[str], start: datetime, end: datetime, lat:float , lon:float, visible_only: bool = True) -> list[dict]:
+def get_satellite(sat_id: str, group: str) -> EarthSatellite:
+    update_tle()
+    return satellites_by_id[group][sat_id]
+
+def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float , lon:float, visible_only: bool = True) -> list[dict]:
 
     logger.info(f"Getting satellite passes: start={start.isoformat()} end={end.isoformat()} lat={lat} lon={lon} visible_only={visible_only}");
 
@@ -72,9 +96,8 @@ def get_satellite_passes(sat_ids: list[str], start: datetime, end: datetime, lat
 
     passes = []
 
-    for sat_id in sat_ids:
+    for satellite in satellites:
 
-        satellite = satellites_by_id[sat_id]
         difference = satellite - coords
 
         t, events = satellite.find_events(coords, t0, t1, altitude_degrees=30.0)
@@ -85,7 +108,7 @@ def get_satellite_passes(sat_ids: list[str], start: datetime, end: datetime, lat
                 curr = {'rise': event}
             elif event['event']=='peak' and curr:
                 curr['peak'] = event
-            elif event['event']=='set'and curr and 'peak' in curr :
+            elif event['event']=='set' and curr and 'peak' in curr :
                 curr['set'] = event
                 curr['is_visible'] = curr['peak']['is_sunlit'] and curr['peak']['is_dark']
                 curr['satellite'] = {
@@ -95,7 +118,7 @@ def get_satellite_passes(sat_ids: list[str], start: datetime, end: datetime, lat
                 if not visible_only or curr['is_visible']:
                     passes.append(curr)
         
-        logger.debug(f"Processed {satellite.name} ({sat_id})")
+        logger.debug(f"Processed {satellite.name} ({satellite.model.satnum})")
     
     passes.sort(key = lambda p: p['peak']['timestamp'])
 
@@ -103,13 +126,11 @@ def get_satellite_passes(sat_ids: list[str], start: datetime, end: datetime, lat
 
     return passes
 
-def get_pass_timeline(sat_id: str, t0: datetime, t1: datetime, lat:float, lon:float, steps: int = 100) -> list[dict]:
+def get_pass_timeline(satellite: EarthSatellite, t0: datetime, t1: datetime, lat:float, lon:float, steps: int = 100) -> list[dict]:
 
     coords = wgs84.latlon(lat, lon)
 
     update_tle()
-
-    satellite = satellites_by_id[sat_id]
 
     x = ts.linspace(ts.from_datetime(t0), ts.from_datetime(t1), steps)
 

@@ -4,20 +4,55 @@
 
 <h5 id='header'></h5>
 
+<form class="row row-cols-sm-auto g-3 align-items-end">
+
+  <div class="col-12">
+    <label for="start-time">Start (Local Time)</label>
+    <input type="datetime-local" class="form-control" id="start-time"></input>
+  </div>
+
+  <div class="col-12">
+    <label for="duration">Duration</label>
+    <select class="form-control" id="duration">
+      <option value=15 selected>15 minutes</option>
+      <option value=30>30 minutes</option>
+      <option value=45>45 minutes</option>
+      <option value=60>60 minutes</option>
+    </select>
+  </div>
+
+  <div class="col-12">
+    <label for="constellation">Constellation</label>
+    <select class="form-control" id="constellation">
+      <option selected>Starlink</option>
+      <option>OneWeb</option>
+    </select>
+  </div>
+
+  <div class="col-12">
+    <button id="go-button" type="button" class="btn btn-primary">Go</button>
+  </div>
+</form>
+
 <table id="predictions" class="table table-striped nowrap" style="width:100%;">
 </table>
 
 <script type="module">
   import { createPredictionsTable } from '/static/scripts/main.mjs';
 
-  const start = luxon.DateTime.fromISO('{{t0|date:"c"}}')
-  const end = luxon.DateTime.fromISO('{{t1|date:"c"}}')
-
-  $('#header').text('Pass predictions for 1 hour starting at ' + start.toLocaleString(luxon.DateTime.TIME_WITH_SHORT_OFFSET));
-
   document.addEventListener('DOMContentLoaded', function () {
-    createPredictionsTable("#predictions",  {{ visible_only | lower }});
+      $('#start-time').val(luxon.DateTime.now().toFormat('yyyy-MM-dd\'T\'HH:mm'));
   });
+
+  document.getElementById('go-button').addEventListener("click",
+    function() {
+      createPredictionsTable("#predictions",
+        $('#constellation').val(),
+        luxon.DateTime.fromISO($('#start-time').val()),
+        parseInt($('#duration').val()),
+        {{ visible_only | lower }});
+    }
+  );
 </script>
 
 {% endblock %}

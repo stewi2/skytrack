@@ -7,3 +7,10 @@ launch.json
 __pycache__
 node_modules
 .ipynb_checkpoints
+.DS_Store
+de421.bsp
+.gitignore
+sup-gp.php
+static/style/style.css
+static/scripts/main.mjs
+gp.php

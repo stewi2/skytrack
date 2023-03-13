@@ -26,6 +26,7 @@ urlpatterns = [
     path('detail/<int:id>', views.detail, name="detail"),
     path('pass/<int:id>', views.pass_timeline, name="pass"),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/groups', views.get_groups, name="groups"),
     path('api/satellites', views.get_satellites, name="satellites"),
     path('api/satellites/<int:id>/passes', views.get_passes, name="passes"),
     path('api/satellites/<int:id>/passes/<int:start>-<int:end>', views.get_pass_details, name="pass"),

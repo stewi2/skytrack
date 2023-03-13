@@ -8,17 +8,22 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .forms import SettingsForm
-from .utils import get_all_satellites, get_pass_timeline, get_satellite, get_satellite_passes
+from .utils import get_all_satellites, get_pass_timeline, get_satellite, get_satellite_passes, get_all_groups
 from .serializers import EarthSatelliteSerializer
 
 #################
 # API Templates
 #################
 
+@api_view(["GET"])
+@csrf_exempt
+def get_groups(request):
+    return Response(data={'data': [g for g in get_all_groups() if g!='NORAD']})
+
 @api_view(['GET'])
 @csrf_exempt
 def get_satellites(request):
-    serializer = EarthSatelliteSerializer(data=get_all_satellites(), many=True)
+    serializer = EarthSatelliteSerializer(data=get_all_satellites('NORAD'), many=True)
     serializer.is_valid()
     return Response(data={'data': serializer.data})
 
@@ -30,12 +35,12 @@ def get_passes(request: HttpRequest, id: str) -> HttpResponse:
     lat = float(request.GET.get('lat', request.session.get('lat')))
     lon = float(request.GET.get('lon', request.session.get('lon')))
 
-    satellite = get_satellite(id)
+    satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
     t1 = t0 + timedelta(days=20)
 
-    events = get_satellite_passes([id], t0, t1, lat, lon, visible_only)
+    events = get_satellite_passes([satellite], t0, t1, lat, lon, visible_only)
 
     return Response(data={'data': events})
 
@@ -46,12 +51,12 @@ def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> Htt
     lat = float(request.GET.get('lat', request.session.get('lat')))
     lon = float(request.GET.get('lon', request.session.get('lon')))
 
-    satellite = get_satellite(id)
+    satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcfromtimestamp(start).replace(tzinfo=timezone.utc)
     t1 = datetime.utcfromtimestamp(end).replace(tzinfo=timezone.utc)
     
-    timeline = get_pass_timeline(id, t0, t1, lat, lon, steps=50)
+    timeline = get_pass_timeline(satellite, t0, t1, lat, lon, steps=50)
 
     return Response(data={'data': timeline})
 
@@ -59,16 +64,22 @@ def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> Htt
 @csrf_exempt
 def get_predictions(request: HttpRequest) -> HttpResponse:
 
-    visible_only = request.GET.get('visible_only', 'true') == 'true'
+    visible_only = request.GET.get('visible_only', 'false') == 'true'
     lat = float(request.GET.get('lat', request.session.get('lat')))
     lon = float(request.GET.get('lon', request.session.get('lon')))
+    group = request.GET.get('group', 'Starlink')
+    start = request.GET.get('start', str(datetime.utcnow().timestamp()))
+    duration = request.GET.get('duration', '60')
 
-    t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
-    t1 = t0 + timedelta(hours=1)
+#    t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
+#    t1 = t0 + timedelta(hours=1)
 
-    ids = [ s.model.satnum for s in get_all_satellites() ]
+    t0 = datetime.fromtimestamp(int(start), tz=timezone.utc)
+    t1 = t0 + timedelta(minutes=int(duration))
 
-    events = get_satellite_passes(ids, t0, t1, lat, lon, visible_only)
+    satellites = get_all_satellites(group)
+
+    events = get_satellite_passes(satellites, t0, t1, lat, lon, visible_only)
 
     return Response(data={'data': events})
 
@@ -97,9 +108,9 @@ def settings(request: HttpRequest) -> HttpResponse:
 
 def detail(request: HttpRequest, id: str) -> HttpResponse:
 
-    visible_only = request.GET.get('visible_only', 'true') == 'true'
+    visible_only = request.GET.get('visible_only', 'false') == 'true'
 
-    satellite = get_satellite(id)
+    satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
     t1 = t0 + timedelta(days=20)
@@ -112,19 +123,14 @@ def detail(request: HttpRequest, id: str) -> HttpResponse:
 
 def predictions(request: HttpRequest) -> HttpResponse:
 
-    visible_only = request.GET.get('visible_only', 'true') == 'true'
-
-    t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
-    t1 = t0 + timedelta(hours=1)
+    visible_only = request.GET.get('visible_only', 'false') == 'true'
 
     return render(request, 'satellites/predictions.html',
-                  context={'visible_only': visible_only,
-                            't0': t0,
-                            't1': t1})
+                  context={'visible_only': visible_only })
 
 def pass_timeline(request: HttpRequest, id: str) -> HttpResponse:
 
-    satellite = get_satellite(id)
+    satellite = get_satellite(id, 'NORAD')
 
     t0 = parser.parse(request.GET.get('start'))
     t1 = parser.parse(request.GET.get('end'))
