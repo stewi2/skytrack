@@ -39,7 +39,7 @@ def update_tle():
         filename = group + ".txt"
         if group not in satellites:
             if not loader._exists(filename) or loader.days_old(filename) > 1:
-                logger.info(f"Downloading latest TLEs for {group} from {url} {loader.days_old(filename)}")
+                logger.info(f"Downloading latest TLEs for {group} from {url}")
                 satellites[group] = loader.tle_file(url, reload=True, filename=filename)
             else:
                 satellites[group] = loader.tle_file(url, reload=False, filename=filename)
