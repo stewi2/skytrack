@@ -1,6 +1,6 @@
-import axios from "axios";
-import { useLoaderData, useParams } from "react-router-dom";
-import DetailTable from "./DetailTable";
+import axios from './axiosConfig';
+import { useLoaderData, useParams } from 'react-router-dom';
+import DetailTable from './DetailTable';
 
 function detailLoader({ params }) {
   const initialValues = JSON.parse(localStorage.getItem('settings')) || {

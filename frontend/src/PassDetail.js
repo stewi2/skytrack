@@ -1,6 +1,6 @@
-import axios from "axios";
-import { useLoaderData, useParams } from "react-router-dom";
-import PassDetailTable from "./PassDetailTable";
+import axios from './axiosConfig';
+import { useLoaderData } from 'react-router-dom';
+import PassDetailTable from './PassDetailTable';
 
 function passDetailLoader({ params }) {
   const initialValues = JSON.parse(localStorage.getItem('settings')) || {

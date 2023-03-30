@@ -1,4 +1,4 @@
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 import { useSettings } from './Settings';
 import logo from './satellite.svg';
 
@@ -20,8 +20,8 @@ const Header = () => {
 
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/predictions">Constellations</Nav.Link>
+          <Nav.Link href="/">Satellites</Nav.Link>
+          <Nav.Link href="/constellations">Constellations</Nav.Link>
           <Nav.Link href="/settings">Settings</Nav.Link>
         </Nav>
       </Navbar.Collapse>

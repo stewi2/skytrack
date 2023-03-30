@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import axios from "axios";
+import axios from './axiosConfig';
 import PredictionsForm from './PredictionsForm';
 import PredictionsTable from './PredictionsTable';
 import { useSettings } from './Settings';

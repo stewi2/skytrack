@@ -21,13 +21,14 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([{
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [{
         path: '/',
         loader: satellitesLoader,
         element: <Satellites />,
         errorElement: <ErrorPage />,
       }, {
-        path: "/predictions",
+        path: "/constellations",
         element: <Predictions />,
         errorElement: <ErrorPage />,
       }, {
