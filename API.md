@@ -1,4 +1,4 @@
-** API Routes
+**API Routes**
 
 GET /api/groups
 
@@ -10,7 +10,7 @@ GET /api/satellites/<id>/passes/<start>-<end>?lat=<latitude>&lon=<longitude>
 
 GET /api/satellites/predictions?group=<group>&duration=<duration>&start=<timestamp>&lat=<latitude>&lon=<longitude>&visible_only=<true|false>
 
-** Browser Routes
+**Browser Routes**
 
 GET /
 
