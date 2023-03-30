@@ -1,0 +1,30 @@
+$font-size-base: .9rem;
+$font-family: sans-serif;
+
+// @import "~bootswatch/dist/zephyr/variables";
+@import "~bootstrap/scss/bootstrap";
+// @import "~bootswatch/dist/zephyr/bootswatch";
+@import "~datatables.net-bs5/css/dataTables.bootstrap5";
+@import "~datatables.net-responsive-bs5/css/responsive.bootstrap5";
+@import "~datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5";
+@import "~datatables.net-select-bs5/css/select.bootstrap5";
+
+.day {
+    color: LightSkyBlue  !important;
+}
+
+.civil_twilight {
+    color: cornflowerblue !important;
+}
+
+.nautical_twilight {
+    color: blueviolet !important;
+}
+
+.astronomical_twilight {
+    color: Blue !important;
+}
+
+.night {
+    color: darkblue !important;
+}

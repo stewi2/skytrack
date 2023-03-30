@@ -4,6 +4,7 @@ from dateutil import parser
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_control
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -22,6 +23,7 @@ def get_groups(request):
 
 @api_view(['GET'])
 @csrf_exempt
+@cache_control(max_age=3600)
 def get_satellites(request):
     serializer = EarthSatelliteSerializer(data=get_all_satellites('NORAD'), many=True)
     serializer.is_valid()
@@ -42,7 +44,10 @@ def get_passes(request: HttpRequest, id: str) -> HttpResponse:
 
     events = get_satellite_passes([satellite], t0, t1, lat, lon, visible_only)
 
-    return Response(data={'data': events})
+    serializer = EarthSatelliteSerializer(data=[satellite], many=True)
+    serializer.is_valid()
+
+    return Response(data={'satellite': serializer.data[0], 'data': events})
 
 @api_view(['GET'])
 @csrf_exempt
@@ -58,7 +63,10 @@ def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> Htt
     
     timeline = get_pass_timeline(satellite, t0, t1, lat, lon, steps=50)
 
-    return Response(data={'data': timeline})
+    serializer = EarthSatelliteSerializer(data=[satellite], many=True)
+    serializer.is_valid()
+
+    return Response(data={'satellite': serializer.data[0], 'data': timeline})
 
 @api_view(['GET'])
 @csrf_exempt
