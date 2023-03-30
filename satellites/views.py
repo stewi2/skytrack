@@ -15,6 +15,7 @@ from .serializers import EarthSatelliteSerializer
 
 @api_view(["GET"])
 @csrf_exempt
+@cache_control(max_age=3600)
 def get_groups(request):
     return Response(data={'data': [g for g in get_all_groups() if g!='NORAD']})
 
@@ -28,6 +29,7 @@ def get_satellites(request):
 
 @api_view(['GET'])
 @csrf_exempt
+@cache_control(max_age=3600)
 def get_passes(request: HttpRequest, id: str) -> HttpResponse:
 
     visible_only = request.GET.get('visible_only', 'true') == 'true'
@@ -48,6 +50,7 @@ def get_passes(request: HttpRequest, id: str) -> HttpResponse:
 
 @api_view(['GET'])
 @csrf_exempt
+@cache_control(max_age=3600)
 def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> HttpResponse:
 
     lat = float(request.GET.get('lat', request.session.get('lat')))
@@ -67,6 +70,7 @@ def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> Htt
 
 @api_view(['GET'])
 @csrf_exempt
+@cache_control(max_age=3600)
 def get_predictions(request: HttpRequest) -> HttpResponse:
 
     visible_only = request.GET.get('visible_only', 'false') == 'true'
