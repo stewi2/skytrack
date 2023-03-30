@@ -9,17 +9,17 @@ WORKDIR /app
 COPY . ./
 
 # Node install and build
-RUN npm install
+RUN npm --prefix frontend install
 
 # Install production dependencies.
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Build static assets
-RUN npm run build
+RUN npm run --prefix frontend build
 
 # export assets
 RUN python manage.py collectstatic
 
 EXPOSE 8080
 
-CMD python manage.py migrate && gunicorn ephem.wsgi -b 0:8080 --workers=10 --access-logfile - --timeout 0
+CMD python manage.py migrate && gunicorn ephem.wsgi -b 0:8080 --access-logfile - --timeout 0

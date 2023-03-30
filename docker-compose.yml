@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: sattrack
+    #env_file: .env
+    restart: on-failure
+#    command: gunicorn hellodjangorest.wsgi -c hellodjangorest/gunicorn.conf.py
+    ports:
+      - "8080:8080"
