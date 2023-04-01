@@ -7,6 +7,7 @@ function detailLoader({ params }) {
     latitude: 0,
     longitude: 0,
     altitude: 0,
+    threshold: 20,
   };
 
   return axios.get(
