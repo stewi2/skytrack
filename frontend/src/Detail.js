@@ -14,6 +14,7 @@ function detailLoader({ params }) {
       lat: initialValues.latitude,
       lon: initialValues.longitude,
       alt: initialValues.altitude,
+      threshold: initialValues.threshold,
       visible_only: false}
     }
   ).then((res) => res.data);
