@@ -28,7 +28,7 @@ const Header = () => {
 
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          lat: { initialValues.latitude.toFixed(2) } / lon: { initialValues.longitude.toFixed(2) }
+          lat: { initialValues.latitude.toFixed(2) }N / lon: { initialValues.longitude.toFixed(2) }E
         </Navbar.Text>
       </Navbar.Collapse>
     </Navbar>

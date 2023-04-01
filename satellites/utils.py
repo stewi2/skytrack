@@ -81,9 +81,9 @@ def get_satellite(sat_id: str, group: str) -> EarthSatellite:
     update_tle()
     return satellites_by_id[group][sat_id]
 
-def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float , lon:float, visible_only: bool = True) -> list[dict]:
+def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float , lon:float, threshold:float, visible_only: bool = True) -> list[dict]:
 
-    logger.info(f"Getting satellite passes: start={start.isoformat()} end={end.isoformat()} lat={lat} lon={lon} visible_only={visible_only}");
+    logger.info(f"Getting satellite passes: start={start.isoformat()} end={end.isoformat()} lat={lat} lon={lon} threshold={threshold} visible_only={visible_only}");
 
     update_tle()
 
@@ -100,7 +100,7 @@ def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float ,
 
         difference = satellite - coords
 
-        t, events = satellite.find_events(coords, t0, t1, altitude_degrees=30.0)
+        t, events = satellite.find_events(coords, t0, t1, altitude_degrees=threshold)
 
         curr = None
         for event in [event_data(t,event,satellite,eph,difference,tod) for t, event in zip(t, events)]:

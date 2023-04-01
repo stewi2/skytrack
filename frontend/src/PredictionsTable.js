@@ -71,6 +71,10 @@ const PredictionsTable = ({data}) => {
         emptyTable: "No matching passes found",
       },
       orderFixed: [ 3, 'asc' ],
+      select: {
+        style: 'single',
+        info: false
+      },
       ordering: false,
       searching: true,
       paging: false,

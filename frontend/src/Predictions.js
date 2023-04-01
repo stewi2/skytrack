@@ -32,7 +32,8 @@ const Predictions = () => {
       visible_only: values.visible_only,
       lat: initialValues.latitude,
       lon: initialValues.longitude,
-      alt: initialValues.altitude
+      alt: initialValues.altitude,
+      threshold: initialValues.threshold,
     });
   };
 

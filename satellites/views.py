@@ -35,13 +35,14 @@ def get_passes(request: HttpRequest, id: str) -> HttpResponse:
     visible_only = request.GET.get('visible_only', 'true') == 'true'
     lat = float(request.GET.get('lat', request.session.get('lat')))
     lon = float(request.GET.get('lon', request.session.get('lon')))
+    threshold = float(request.GET.get('threshold', request.session.get('threshold')));
 
     satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
     t1 = t0 + timedelta(days=20)
 
-    events = get_satellite_passes([satellite], t0, t1, lat, lon, visible_only)
+    events = get_satellite_passes([satellite], t0, t1, lat, lon, threshold, visible_only)
 
     serializer = EarthSatelliteSerializer(data=[satellite], many=True)
     serializer.is_valid()
@@ -78,13 +79,14 @@ def get_predictions(request: HttpRequest) -> HttpResponse:
     lon = float(request.GET.get('lon', request.session.get('lon')))
     group = request.GET.get('group', 'Starlink')
     start = request.GET.get('start', str(datetime.utcnow().timestamp()))
-    duration = request.GET.get('duration', '60')
+    duration = int(request.GET.get('duration', '60'))
+    threshold = float(request.GET.get('threshold', '20'))
 
     t0 = datetime.fromtimestamp(int(start), tz=timezone.utc)
-    t1 = t0 + timedelta(minutes=int(duration))
+    t1 = t0 + timedelta(minutes=duration)
 
     satellites = get_all_satellites(group)
 
-    events = get_satellite_passes(satellites, t0, t1, lat, lon, visible_only)
+    events = get_satellite_passes(satellites, t0, t1, lat, lon, threshold, visible_only)
 
     return Response(data={'data': events})

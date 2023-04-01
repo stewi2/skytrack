@@ -12,6 +12,7 @@ function SettingsProvider(props) {
     latitude: 0,
     longitude: 0,
     altitude: 0,
+    threshold: 20,
   };
 
   const validationSchema = Yup.object().shape({
@@ -25,6 +26,9 @@ function SettingsProvider(props) {
       .required('Longitude is required'),
     altitude: Yup.number()
       .required('Altitude is required'),
+    threshold: Yup.number()
+      .required('Altitude threshold is required'),
+
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -88,6 +92,11 @@ function Settings() {
             <BootstrapForm.Label>Altitude:</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="altitude" />
             <ErrorMessage name="altitude" component="div" style={{ color: 'red' }} />
+          </BootstrapForm.Group>
+          <BootstrapForm.Group>
+            <BootstrapForm.Label>Min Altitude [deg]:</BootstrapForm.Label>
+            <Field as={BootstrapForm.Control} type="number" name="threshold" />
+            <ErrorMessage name="threshold" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <Button variant="primary" type="submit" disabled={isSubmitting}>
             {isSubmitting ? <Spinner animation="border" size="sm" /> : 'Save'}
