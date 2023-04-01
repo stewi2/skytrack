@@ -33,16 +33,17 @@ def get_satellites(request):
 def get_passes(request: HttpRequest, id: str) -> HttpResponse:
 
     visible_only = request.GET.get('visible_only', 'true') == 'true'
-    lat = float(request.GET.get('lat', request.session.get('lat')))
-    lon = float(request.GET.get('lon', request.session.get('lon')))
-    threshold = float(request.GET.get('threshold', request.session.get('threshold')));
+    lat = float(request.GET.get('lat'))
+    lon = float(request.GET.get('lon'))
+    alt = float(request.GET.get('alt'))
+    threshold = float(request.GET.get('threshold'))
 
     satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcnow().replace(tzinfo=timezone.utc)
     t1 = t0 + timedelta(days=20)
 
-    events = get_satellite_passes([satellite], t0, t1, lat, lon, threshold, visible_only)
+    events = get_satellite_passes([satellite], t0, t1, lat, lon, alt, threshold, visible_only)
 
     serializer = EarthSatelliteSerializer(data=[satellite], many=True)
     serializer.is_valid()
@@ -54,15 +55,16 @@ def get_passes(request: HttpRequest, id: str) -> HttpResponse:
 @cache_control(max_age=3600)
 def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> HttpResponse:
 
-    lat = float(request.GET.get('lat', request.session.get('lat')))
-    lon = float(request.GET.get('lon', request.session.get('lon')))
+    lat = float(request.GET.get('lat'))
+    lon = float(request.GET.get('lon'))
+    alt = float(request.GET.get('alt'))
 
     satellite = get_satellite(id, 'NORAD')
 
     t0 = datetime.utcfromtimestamp(start).replace(tzinfo=timezone.utc)
     t1 = datetime.utcfromtimestamp(end).replace(tzinfo=timezone.utc)
     
-    timeline = get_pass_timeline(satellite, t0, t1, lat, lon, steps=50)
+    timeline = get_pass_timeline(satellite, t0, t1, lat, lon, alt, steps=50)
 
     serializer = EarthSatelliteSerializer(data=[satellite], many=True)
     serializer.is_valid()
@@ -75,8 +77,9 @@ def get_pass_details(request: HttpRequest, id: str, start: int, end: int) -> Htt
 def get_predictions(request: HttpRequest) -> HttpResponse:
 
     visible_only = request.GET.get('visible_only', 'false') == 'true'
-    lat = float(request.GET.get('lat', request.session.get('lat')))
-    lon = float(request.GET.get('lon', request.session.get('lon')))
+    lat = float(request.GET.get('lat'))
+    lon = float(request.GET.get('lon'))
+    alt = float(request.GET.get('alt'))    
     group = request.GET.get('group', 'Starlink')
     start = request.GET.get('start', str(datetime.utcnow().timestamp()))
     duration = int(request.GET.get('duration', '60'))
@@ -87,6 +90,6 @@ def get_predictions(request: HttpRequest) -> HttpResponse:
 
     satellites = get_all_satellites(group)
 
-    events = get_satellite_passes(satellites, t0, t1, lat, lon, threshold, visible_only)
+    events = get_satellite_passes(satellites, t0, t1, lat, lon, alt, threshold, visible_only)
 
     return Response(data={'data': events})

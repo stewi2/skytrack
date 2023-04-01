@@ -81,13 +81,13 @@ def get_satellite(sat_id: str, group: str) -> EarthSatellite:
     update_tle()
     return satellites_by_id[group][sat_id]
 
-def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float , lon:float, threshold:float, visible_only: bool = True) -> list[dict]:
+def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float , lon:float, alt: float, threshold:float, visible_only: bool = True) -> list[dict]:
 
-    logger.info(f"Getting satellite passes: start={start.isoformat()} end={end.isoformat()} lat={lat} lon={lon} threshold={threshold} visible_only={visible_only}");
+    logger.info(f"Getting satellite passes: start={start.isoformat()} end={end.isoformat()} lat={lat} lon={lon} alt={alt} threshold={threshold} visible_only={visible_only}");
 
     update_tle()
 
-    coords = wgs84.latlon(lat, lon)
+    coords = wgs84.latlon(lat, lon, alt);
 
     tod = almanac.dark_twilight_day(eph, coords)
 
@@ -126,9 +126,9 @@ def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float ,
 
     return passes
 
-def get_pass_timeline(satellite: EarthSatellite, t0: datetime, t1: datetime, lat:float, lon:float, steps: int = 100) -> list[dict]:
+def get_pass_timeline(satellite: EarthSatellite, t0: datetime, t1: datetime, lat:float, lon:float, alt: float, steps: int = 100) -> list[dict]:
 
-    coords = wgs84.latlon(lat, lon)
+    coords = wgs84.latlon(lat, lon, alt)
 
     update_tle()
 
