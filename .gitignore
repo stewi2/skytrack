@@ -12,3 +12,4 @@ de421.bsp
 .gitignore
 sup-gp.php
 staticfiles
+.env
