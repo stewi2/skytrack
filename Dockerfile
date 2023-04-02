@@ -4,13 +4,16 @@ FROM nikolaik/python-nodejs:python3.10-nodejs19-slim
 ENV PYTHONUNBUFFERED True
 
 WORKDIR /app
+
+# Install python dependencies.
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . ./
 
 # Node install and build
 RUN npm --prefix frontend install
 
-# Install production dependencies.
-RUN pip install --no-cache-dir -r requirements.txt
 
 # Build static assets
 # RUN npm run --prefix frontend build

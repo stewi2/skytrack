@@ -14,7 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     DEBUG=(bool, True),
-    ADMIN_ENABLED=(bool, True))
+    ADMIN_ENABLED=(bool, True),
+    SECRET_KEY=(str,'django-insecure-mbv$8^_f&=d90va4x+7ifmcynia@t9d!g#0&2wuv6-f%o89ian')
+)
 
 env_file = os.path.join(BASE_DIR, ".env")
 
@@ -40,8 +42,7 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    logger.warn("No local .env or GOOGLE_CLOUD_PROJECT detected. Using default insecure secrets.")
-    env["SECRET_KEY"] = 'django-insecure-mbv$8^_f&=d90va4x+7ifmcynia@t9d!g#0&2wuv6-f%o89ian'    
+    logger.warn("No local .env or GOOGLE_CLOUD_PROJECT detected. Using default insecure secrets.")   
 # [END cloudrun_django_secret_config]
 
 SECRET_KEY = env("SECRET_KEY")
