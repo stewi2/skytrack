@@ -1,4 +1,4 @@
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, Container } from 'react-bootstrap';
 import { useSettings } from './Settings';
 import logo from './satellite.svg';
 
@@ -7,14 +7,15 @@ const Header = () => {
   const { initialValues } = useSettings();
 
   return (
-    <Navbar bg="light" expand="sm">
-      <Navbar.Brand>
-        <img src={logo}
-          width="30" height="24" alt="logo"
-          className="d-inline-block align-text-top" />
-        {' '}
-        SkyTrack
-      </Navbar.Brand>
+    <Navbar bg="light" expand="md">
+      <Container>
+        <Navbar.Brand>
+          <img src={logo}
+            width="30" height="24" alt="logo"
+            className="d-inline-block align-text-top" />
+          {' '}
+          SkyTrack
+        </Navbar.Brand>
 
       <Navbar.Toggle />
 
@@ -24,13 +25,12 @@ const Header = () => {
           <Nav.Link href="/constellations">Constellations</Nav.Link>
           <Nav.Link href="/settings">Settings</Nav.Link>
         </Nav>
-      </Navbar.Collapse>
 
-      <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          lat: { initialValues.latitude.toFixed(2) }N / lon: { initialValues.longitude.toFixed(2) }E
+          lat: { initialValues.latitude.toFixed(2) } N / lon: { initialValues.longitude.toFixed(2) } E
         </Navbar.Text>
       </Navbar.Collapse>
+      </Container>
     </Navbar>
   )
 }
