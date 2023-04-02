@@ -14,7 +14,7 @@ window.$ = $;
 const PassDetailTable = ({data, satid}) => {
 
   useLayoutEffect(() => {
-    $('#datatable').append('<table class="table table-striped compact nowrap" />')
+    $('#datatable').append('<table class="table table-striped compact nowrap"  width="100%" />')
     $('#datatable > table').DataTable({
       data: data,
       columns: [

@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik';
-import { Row, Col, Button, Form as BootstrapForm, Spinner } from 'react-bootstrap';
+import { Row, Button, Form as BootstrapForm, Spinner } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 
 const PredictionsForm = ({ handleSubmit, isFetching }) => {
@@ -16,7 +16,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
       {({ values, setFieldValue }) => (
         <Form>
           <Row className="align-items-end">
-            <BootstrapForm.Group as={Col}>
+            <BootstrapForm.Group>
               <BootstrapForm.Label htmlFor="start-time">Start (Local Time)</BootstrapForm.Label>
               <Field as={BootstrapForm.Control}
                 name="start"
@@ -25,7 +25,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
                 id="start-time" />
             </BootstrapForm.Group>
 
-            <BootstrapForm.Group as={Col}>
+            <BootstrapForm.Group>
               <BootstrapForm.Label htmlFor="duration">Duration</BootstrapForm.Label>
               <Field as={BootstrapForm.Select} name="duration">
                 <option value={15}>15 minutes</option>
@@ -35,7 +35,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
               </Field>
             </BootstrapForm.Group>
 
-            <BootstrapForm.Group as={Col}>
+            <BootstrapForm.Group>
               <BootstrapForm.Label htmlFor="constellation">Constellation</BootstrapForm.Label>
               <Field as={BootstrapForm.Select} name="group">
                 <option>Starlink</option>
@@ -54,14 +54,14 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
               </Field>
             </BootstrapForm.Group>
 
-            <BootstrapForm.Group as={Col}>
+            <BootstrapForm.Group>
               <Field as={BootstrapForm.Check}
                       name="visible_only" label="Visible Only"
                       checked={values.visible_only}
                       onChange={e => setFieldValue('visible_only', e.target.checked)} />
             </BootstrapForm.Group>
 
-            <BootstrapForm.Group as={Col}>
+            <BootstrapForm.Group>
               <Button type="submit" variant="primary" disabled={isFetching}>
                 {isFetching ? <Spinner animation="border" size="sm" />: 'Go'}
             </Button>

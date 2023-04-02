@@ -25,12 +25,12 @@ const PredictionsTable = ({data}) => {
   let { initialValues } = useSettings();
 
   useLayoutEffect(() => {
-    $('#datatable').append('<table class="table table-striped compact nowrap" />')
+    $('#datatable').append('<table class="table table-striped compact nowrap" width="100%" />')
     $('#datatable > table').DataTable({
       data: data,
       columns: [
         { title: 'satellite', data: 'satellite.name', responsivePriority: 1 },
-        { title: 'NORAD ID', data: 'satellite.id', responsivePriority: 4 },
+        { title: 'NORAD ID', data: 'satellite.id', responsivePriority: 6 },
         { title: 'rise', data: 'rise.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
         { title: 'peak', data: 'peak.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, order: 'asc', responsivePriority: 1 },
         { title: 'set', data: 'set.timestamp', render: DataTable.render.datetime('h:mm:ss a'), searchable: false, responsivePriority: 5 },
@@ -91,7 +91,7 @@ const PredictionsTable = ({data}) => {
   });
 
   return (
-    <div id="datatable" width="100%" />
+    <div id="datatable" />
   );
 };
 

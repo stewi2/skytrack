@@ -117,6 +117,8 @@ def get_satellite_passes(satellites, start: datetime, end: datetime, lat:float ,
                 }
                 if not visible_only or curr['is_visible']:
                     passes.append(curr)
+
+                curr = None
         
         logger.debug(f"Processed {satellite.name} ({satellite.model.satnum})")
     
