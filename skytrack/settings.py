@@ -6,6 +6,9 @@ import dj_database_url
 import environ
 import google.auth
 from google.cloud import secretmanager
+import logging
+
+logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,8 +40,10 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+    logger.warn("No local .env or GOOGLE_CLOUD_PROJECT detected. Using default insecure secrets.")
+    env["SECRET_KEY"] = 'django-insecure-mbv$8^_f&=d90va4x+7ifmcynia@t9d!g#0&2wuv6-f%o89ian'    
 # [END cloudrun_django_secret_config]
+
 SECRET_KEY = env("SECRET_KEY")
 
 TEMPLATE_DIR = BASE_DIR / "templates"
@@ -105,7 +110,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-ROOT_URLCONF = 'ephem.urls'
+ROOT_URLCONF = 'skytrack.urls'
 
 TEMPLATES = [
     {
@@ -123,7 +128,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ephem.wsgi.application'
+WSGI_APPLICATION = 'skytrack.wsgi.application'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
