@@ -9,14 +9,14 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . ./
-
-# Node install and build
+# install frontend dependencies
+COPY ./frontend/package*.json ./frontend/
 RUN npm --prefix frontend install
 
+COPY . ./
 
 # Build static assets
-# RUN npm run --prefix frontend build
+RUN npm run --prefix frontend build
 
 # export assets
 RUN python manage.py collectstatic
