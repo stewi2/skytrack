@@ -6,11 +6,14 @@ ENV PYTHONUNBUFFERED True
 WORKDIR /app
 COPY . ./
 
+# Node install and build
+RUN npm --prefix frontend install
+
 # Install production dependencies.
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Build frontend assets
-RUN npm run --prefix frontend build
+# Build static assets
+# RUN npm run --prefix frontend build
 
 # export assets
 RUN python manage.py collectstatic
