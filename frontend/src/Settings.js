@@ -89,12 +89,12 @@ function Settings() {
             <ErrorMessage name="longitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Altitude:</BootstrapForm.Label>
+            <BootstrapForm.Label>Altitude [m]:</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="altitude" />
             <ErrorMessage name="altitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Min Altitude [deg]:</BootstrapForm.Label>
+            <BootstrapForm.Label>Min Transit Altitude [deg]:</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="threshold" />
             <ErrorMessage name="threshold" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
