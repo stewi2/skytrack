@@ -8,7 +8,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
     start: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
     duration: 15,
     group: 'Starlink',
-    visible_only: false,
+    visible_only: true,
   }
 
   return (
