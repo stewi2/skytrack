@@ -18,8 +18,6 @@ const Predictions = () => {
         params: params,
       }).then((res) => res.data),
     staleTime: Infinity,
-    keepPreviousData: true,
-    refetchOnWindowFocus: true,
     refetchOnMount: false,
     enabled: !!params,
   });

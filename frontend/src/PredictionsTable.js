@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { renderToString } from 'react-dom/server'
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
@@ -24,7 +24,7 @@ const PredictionsTable = ({data}) => {
 
   let { initialValues } = useSettings();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     $('#datatable').append('<table class="table table-striped compact nowrap" width="100%" />')
     $('#datatable > table').DataTable({
       data: data,
@@ -82,7 +82,6 @@ const PredictionsTable = ({data}) => {
       responsive: true,
       fixedHeader: false,
     });
-
 
     return () => {
       $('#datatable').empty();

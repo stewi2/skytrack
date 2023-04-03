@@ -1,8 +1,6 @@
 import telescope from './telescope.svg'
 import parabola from './parabola.svg'
 import crystalball from './crystal-ball-future.svg'
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
 function UnistellarLink({ra_deg, dec_deg, timestamp}) {
   let uri = new URL('unistellar://science/occultation')
@@ -18,17 +16,7 @@ function UnistellarLink({ra_deg, dec_deg, timestamp}) {
 
   return (
     <a href={uri}>
-    <OverlayTrigger
-      placement="right"
-      delay={{ show: 250, hide: 400 }}
-      overlay={
-        <Tooltip>
-          Unistellar Deeplink
-        </Tooltip>
-      }
-    >
       <img src={telescope} width="16" height="16" alt="telescope" />
-    </OverlayTrigger>
     </a>
   )
 }
