@@ -35,7 +35,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
             </BootstrapForm.Group>
 
             <BootstrapForm.Group>
-              <BootstrapForm.Label htmlFor="constellation">Constellation</BootstrapForm.Label>
+              <BootstrapForm.Label htmlFor="constellation">Satellite Constellation</BootstrapForm.Label>
               <Field as={BootstrapForm.Select} name="group">
                 <option>Starlink</option>
                 <option>OneWeb</option>
