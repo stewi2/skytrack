@@ -42,9 +42,9 @@ function SettingsProvider(props) {
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setFieldValue('latitude', position.coords.latitude);
-        setFieldValue('longitude', position.coords.longitude);
-        setFieldValue('altitude', position.coords.altitude || 0);
+        setFieldValue('latitude', Math.round(10000*position.coords.latitude)/10000);
+        setFieldValue('longitude', Math.round(10000*position.coords.longitude)/10000);
+        setFieldValue('altitude', Math.round(10*position.coords.altitude)/10 || 0);
         setIsLoading(false);
       },
       (error) => {
@@ -82,12 +82,12 @@ function Settings() {
         <Form>
         <Stack gap={3}>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Latitude</BootstrapForm.Label>
+            <BootstrapForm.Label>Latitude (N)</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="latitude" />
             <ErrorMessage name="latitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Longitude</BootstrapForm.Label>
+            <BootstrapForm.Label>Longitude (E)</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="longitude" />
             <ErrorMessage name="longitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
