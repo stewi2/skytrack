@@ -1,5 +1,5 @@
 import axios from './axiosConfig';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useParams } from 'react-router-dom';
 import PassDetailTable from './PassDetailTable';
 
 function passDetailLoader({ params }) {
@@ -21,9 +21,14 @@ function passDetailLoader({ params }) {
 
 const PassDetail = () => {
   const data = useLoaderData();
+  const params = useParams();
+  const range = params.range.split('-');
+
   return (
     <>
-      <h5>Detail for the pass of {data.satellite.name} ({data.satellite.id})</h5>
+      <h5 align="center">{data.satellite.name} ({data.satellite.id})</h5>
+      <p align="center">Pass at {new Date(range[0]*1000).toLocaleString()}</p>
+
       <PassDetailTable data={data.data} />
     </>
   )

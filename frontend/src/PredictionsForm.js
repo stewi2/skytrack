@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik';
-import { Button, Form as BootstrapForm, Spinner } from 'react-bootstrap';
+import { Button, Form as BootstrapForm, Spinner, Stack } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 
 const PredictionsForm = ({ handleSubmit, isFetching }) => {
@@ -15,6 +15,7 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ values, setFieldValue }) => (
         <Form>
+          <Stack gap="3">
             <BootstrapForm.Group>
               <BootstrapForm.Label htmlFor="start-time">Start (Local Time)</BootstrapForm.Label>
               <Field as={BootstrapForm.Control}
@@ -55,16 +56,16 @@ const PredictionsForm = ({ handleSubmit, isFetching }) => {
 
             <BootstrapForm.Group>
               <Field as={BootstrapForm.Check}
+                      type="switch"
                       name="visible_only" label="Visible Only"
                       checked={values.visible_only}
                       onChange={e => setFieldValue('visible_only', e.target.checked)} />
             </BootstrapForm.Group>
 
-            <BootstrapForm.Group>
               <Button type="submit" variant="primary" disabled={isFetching}>
                 {isFetching ? <Spinner animation="border" size="sm" />: 'Go'}
               </Button>
-            </BootstrapForm.Group>
+          </Stack>
         </Form>
       )}
     </Formik>

@@ -16,7 +16,7 @@ function detailLoader({ params }) {
       lon: initialValues.longitude,
       alt: initialValues.altitude,
       threshold: initialValues.threshold,
-      visible_only: false}
+      visible_only: true}
     }
   ).then((res) => res.data);
 }
@@ -26,7 +26,9 @@ const Detail = () => {
   const data = useLoaderData();
   return (
     <>
-      <h5>{data.satellite.name} ({data.satellite.id})</h5>
+      <h5 align="center">{data.satellite.name} ({data.satellite.id})</h5>
+      <p align="center">Visible passes for the next 20 days.</p>
+
       <DetailTable data={data.data} satid={satid} />
     </>
   )

@@ -37,6 +37,8 @@ const Predictions = () => {
 
   return (
     <>
+      <h5 align="center">Satellite Constellation Pass Predictions</h5>
+
       <PredictionsForm handleSubmit={handleSubmit} isFetching={isFetching} />
 
       <hr />

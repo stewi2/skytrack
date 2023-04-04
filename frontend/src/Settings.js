@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Button, Form as BootstrapForm, Spinner } from 'react-bootstrap';
+import { Button, Form as BootstrapForm, Spinner, Stack } from 'react-bootstrap';
 
 const SettingsContext = createContext();
 
@@ -75,26 +75,29 @@ function Settings() {
   const { initialValues, validationSchema, handleSubmit, handleGetLocation, isSaved, isLoading } = useSettings();
 
   return (
+    <>
+    <h5 align="center">Settings</h5>
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {({ isSubmitting, setFieldValue }) => (
         <Form>
+        <Stack gap={3}>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Latitude:</BootstrapForm.Label>
+            <BootstrapForm.Label>Latitude</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="latitude" />
             <ErrorMessage name="latitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Longitude:</BootstrapForm.Label>
+            <BootstrapForm.Label>Longitude</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="longitude" />
             <ErrorMessage name="longitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Altitude [m]:</BootstrapForm.Label>
+            <BootstrapForm.Label>Altitude [m]</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="altitude" />
             <ErrorMessage name="altitude" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
           <BootstrapForm.Group>
-            <BootstrapForm.Label>Min Transit Altitude [deg]:</BootstrapForm.Label>
+            <BootstrapForm.Label>Min Transit Altitude [deg]</BootstrapForm.Label>
             <Field as={BootstrapForm.Control} type="number" name="threshold" />
             <ErrorMessage name="threshold" component="div" style={{ color: 'red' }} />
           </BootstrapForm.Group>
@@ -105,9 +108,11 @@ function Settings() {
             {isLoading ? <><Spinner animation="border" size="sm" /> Locating...</>: 'Get Location'}
           </Button>
           {isSaved && <div style={{ color: 'green' }}>Saved!</div>}
+        </Stack>
         </Form>
       )}
     </Formik>
+    </>
   );
 }
 

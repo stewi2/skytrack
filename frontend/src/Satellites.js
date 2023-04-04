@@ -10,7 +10,7 @@ const Satellites = () => {
   const data = useLoaderData();
   return (
     <>
-      <h5>Active Satellites</h5>
+      <h5 align="center">Active Satellites</h5>
       <SatellitesListTable data={data.data} />
     </>
   )
