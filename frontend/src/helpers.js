@@ -21,14 +21,15 @@ function UnistellarLink({ra_deg, dec_deg, timestamp}) {
   )
 }
 
-function PredictionsLink({id}) {
-  let url = new URL('/detail/'+id, window.location)
-  return <a href={url}><img src={crystalball} width="16" height="16" alt="crystal ball" /></a>  
+function PredictionsButton({id, navigate}) {
+  return <input type="image" onClick={() => navigate('/satellites/'+id)}
+            src={crystalball} width="16" height="16" alt="crystal ball" />
 }
 
-function PassDetailLink({id, t0, t1, settings}) {
-  let url = new URL(`/pass/${id}/${Math.floor(new Date(t0).getTime()/1000)}-${Math.round(new Date(t1).getTime()/1000)}`, window.location)
-  return <a href={url}><img src={parabola} width="16" height="16" alt="parabola" /></a>
+function PassDetailButton({id, t0, t1, settings, navigate}) {
+  return <input type="image"
+          onClick={() => navigate(`/pass/${id}/${Math.floor(new Date(t0).getTime()/1000)}-${Math.round(new Date(t1).getTime()/1000)}`)}
+          src={parabola} width="16" height="16" alt="parabola" />
 }
 
-export {PassDetailLink, UnistellarLink, PredictionsLink};
+export { PassDetailButton, UnistellarLink, PredictionsButton };

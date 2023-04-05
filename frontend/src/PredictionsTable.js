@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
-import { renderToString } from 'react-dom/server'
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-scroller-bs5';
 import 'datatables.net-fixedheader-bs5';
 import 'datatables.net-select-bs5';
-import { UnistellarLink, PassDetailLink } from './helpers';
+import { UnistellarLink, PassDetailButton } from './helpers';
 import { useSettings } from './Settings';
+import { useNavigate } from 'react-router-dom';
+import { createRoot } from 'react-dom/client'
 
 window.luxon = require('luxon');
 window.$ = $;
@@ -23,6 +24,7 @@ const tod_classes = {
 const PredictionsTable = ({data}) => {
 
   let { initialValues } = useSettings();
+  const navigate = useNavigate();
 
   useEffect(() => {
     $('#datatable').append('<table class="table table-striped compact nowrap" width="100%" />')
@@ -55,12 +57,20 @@ const PredictionsTable = ({data}) => {
           searchable: false,
           responsivePriority: 4
         },
-        { data: ( row, type, set, meta ) => renderToString(<PassDetailLink id={row.satellite.id} t0={row.rise.timestamp} t1={row.set.timestamp} settings={initialValues} />),
+        { data: ( row ) => row,
+          createdCell: (nTd, row) => createRoot(nTd).render(
+            <PassDetailButton id={row.satellite.id}
+                              t0={row.rise.timestamp} t1={row.set.timestamp}
+                              settings={initialValues} navigate={navigate}/>
+          ),
           orderable: false,
           searchable: false,
           responsivePriority: 1,
         },
-        { data: ( row, type, set, meta ) => renderToString(<UnistellarLink {...row.peak} />),
+        { data: ( row ) => row,
+          createdCell: (nTd, row) => createRoot(nTd).render(
+            <UnistellarLink {...row.peak} />
+          ),
           orderable: false,
           searchable: false,
           responsivePriority: 1

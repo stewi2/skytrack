@@ -1,18 +1,20 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { renderToString } from 'react-dom/server'
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-scroller-bs5';
 import 'datatables.net-fixedheader-bs5';
 import 'datatables.net-select-bs5';
-import { PredictionsLink } from './helpers';
+import { PredictionsButton } from './helpers';
+import { createRoot } from 'react-dom/client'
+import { useNavigate } from "react-router-dom";
 
 window.luxon = require('luxon');
 window.$ = $;
 
 const SatellitesListTable = (props) => {
   const tableRef = useRef();
+  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     $(tableRef.current).DataTable({
@@ -21,7 +23,10 @@ const SatellitesListTable = (props) => {
         { title: 'NORAD id', data: 'id', responsivePriority: 2 },
         { title: 'Name', data: 'name', responsivePriority: 1 },
         { title: 'Epoch', data: 'epoch', render: DataTable.render.datetime('DD'), responsivePriority: 3 },
-        { data: ( row, type, set, meta ) => renderToString(<PredictionsLink {...row} />),
+        { data: 'id',
+          createdCell: (nTd, id) => createRoot(nTd).render(
+            <PredictionsButton id={id} navigate={navigate} />
+          ),
           responsivePriority: 1,
           sortable: false
         },
@@ -35,7 +40,7 @@ const SatellitesListTable = (props) => {
       scrollCollapse: true,
       scroller: true,
       scrollY:  '50vh',
-      dom: 'frti'
+      dom: 'frti',
     });
 
     return () => {

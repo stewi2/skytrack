@@ -1,4 +1,6 @@
 import { Nav, Navbar, Container } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap'
+import { NavLink } from 'react-router-dom';
 import { useSettings } from './Settings';
 import logo from './satellite.svg';
 
@@ -21,9 +23,15 @@ const Header = () => {
 
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="/">Satellites</Nav.Link>
-          <Nav.Link href="/constellations">Constellations</Nav.Link>
-          <Nav.Link href="/settings">Settings</Nav.Link>
+          <LinkContainer to="/satellites">
+            <Nav.Link>Satellites</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/constellations">
+            <Nav.Link>Constellations</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/settings">
+            <Nav.Link>Settings</Nav.Link>
+          </LinkContainer>
         </Nav>
 
         <Navbar.Text>

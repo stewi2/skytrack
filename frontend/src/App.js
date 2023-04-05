@@ -23,7 +23,7 @@ const router = createBrowserRouter([{
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [{
-        path: '/',
+        path: '/satellites',
         loader: satellitesLoader,
         element: <Satellites />,
         errorElement: <ErrorPage />,
@@ -36,7 +36,7 @@ const router = createBrowserRouter([{
         element: <Settings />,
         errorElement: <ErrorPage />,
       }, {
-        path: "/detail/:satid",
+        path: "/satellites/:satid",
         loader: detailLoader,
         element: <Detail />,
         errorElement: <ErrorPage />,

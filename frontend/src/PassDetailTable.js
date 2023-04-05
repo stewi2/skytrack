@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { renderToString } from 'react-dom/server'
+import { createRoot } from 'react-dom/client'
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
@@ -25,7 +25,10 @@ const PassDetailTable = ({data, satid}) => {
         { title: 'angular rate', data: 'angular_rate', render: DataTable.render.number(null,null,0,null,' arcmin/s'), responsivePriority: 4},
         { title: 'Distance', data: 'distance', render: DataTable.render.number(null,null,0,null,' km'), responsivePriority: 4},
         { title: 'sunlit', data: 'is_sunlit', render: function ( val, type, row ) { return val?'Y':'N' }, responsivePriority: 3 },
-        { data: ( row, type, set, meta ) => renderToString(<UnistellarLink ra_deg={row.ra_deg} dec_deg={row.dec_deg} timestamp={row.timestamp} />),
+        { data: ( row ) => row,
+          createdCell: (nTd, row) => createRoot(nTd).render(
+            <UnistellarLink {...row} />
+          ),
           responsivePriority: 1
         },
       ],
