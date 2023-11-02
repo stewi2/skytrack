@@ -2,6 +2,15 @@
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 	 viewBox="0 0 512 512" xml:space="preserve">
+<defs>
+    <style>
+        @media (prefers-color-scheme:dark) {
+            svg {
+                fill: #ffffff;
+            }
+        }
+    </style>
+</defs>
 <g>
 	<g>
 		<path d="M386.327,306.005c-11.622-11.622-27.069-17.134-42.328-16.557c0.577-15.257-4.935-30.705-16.557-42.328l-20.563-20.563

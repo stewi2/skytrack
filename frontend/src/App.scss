@@ -1,9 +1,9 @@
 $font-size-base: .9rem;
 $font-family: sans-serif;
 
-// @import "~bootswatch/dist/zephyr/variables";
+@import "~bootswatch/dist/cerulean/variables";
 @import "~bootstrap/scss/bootstrap";
-// @import "~bootswatch/dist/zephyr/bootswatch";
+@import "~bootswatch/dist/cerulean/bootswatch";
 @import "~datatables.net-bs5/css/dataTables.bootstrap5";
 @import "~datatables.net-responsive-bs5/css/responsive.bootstrap5";
 @import "~datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5";

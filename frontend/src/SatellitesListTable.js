@@ -19,6 +19,7 @@ const SatellitesListTable = (props) => {
   useLayoutEffect(() => {
     $(tableRef.current).DataTable({
       data: props.data,
+      order: [[0,'desc']],
       columns: [
         { title: 'NORAD id', data: 'id', responsivePriority: 2 },
         { title: 'Name', data: 'name', responsivePriority: 1 },

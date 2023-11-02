@@ -1,7 +1,6 @@
 import SatellitesListTable from './SatellitesListTable.js'
 import axios from './axiosConfig';
-import { useLoaderData, Link, NavLink } from 'react-router-dom';
-import { PredictionsLink } from './helpers.js';
+import { useLoaderData } from 'react-router-dom';
 
 function satellitesLoader() {
   return axios.get('/api/satellites').then((res) => res.data);

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import './App.scss';
+import './bootstrap-auto-dark-mode'
 
 import Container from 'react-bootstrap/Container';
 
@@ -23,7 +24,7 @@ const router = createBrowserRouter([{
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [{
-        path: '/satellites',
+        path: '/',
         loader: satellitesLoader,
         element: <Satellites />,
         errorElement: <ErrorPage />,

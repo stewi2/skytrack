@@ -1,6 +1,5 @@
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
-import { NavLink } from 'react-router-dom';
 import { useSettings } from './Settings';
 import logo from './satellite.svg';
 
@@ -9,7 +8,7 @@ const Header = () => {
   const { initialValues } = useSettings();
 
   return (
-    <Navbar bg="light" expand="md">
+    <Navbar expand="md">
       <Container>
         <Navbar.Brand>
           <img src={logo}
@@ -23,8 +22,8 @@ const Header = () => {
 
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <LinkContainer to="/satellites">
-            <Nav.Link>Satellites</Nav.Link>
+          <LinkContainer exact="true" to="/">
+            <Nav.Link>Home</Nav.Link>
           </LinkContainer>
           <LinkContainer to="/constellations">
             <Nav.Link>Constellations</Nav.Link>
