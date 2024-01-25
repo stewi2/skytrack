@@ -13,4 +13,7 @@ de421.bsp
 sup-gp.php
 staticfiles
 .env
-.firebase
+**/.firebase
+/functions/venv/
+/frontend/build
+build
