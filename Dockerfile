@@ -1,8 +1,5 @@
 FROM nikolaik/python-nodejs:python3.10-nodejs19-slim
 
-# Allow statements and log messages to immediately appear in the Knative logs
-ENV PYTHONUNBUFFERED True
-
 WORKDIR /app
 
 # Install python dependencies.
