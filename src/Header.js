@@ -11,9 +11,10 @@ const Header = () => {
     <Navbar expand="md">
       <Container>
         <Navbar.Brand>
-          <img src={logo}
-            width="30" height="24" alt="logo"
-            className="d-inline-block align-text-top" />
+          <object type="image/svg+xml"
+          title="Logo"
+          data={logo}
+          role="img" width="30" height="24"></object>
           {' '}
           SkyTrack
         </Navbar.Brand>

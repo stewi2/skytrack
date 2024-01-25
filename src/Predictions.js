@@ -14,7 +14,7 @@ const Predictions = () => {
   const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: [params],
     queryFn: () => axios.get(
-      '/api/satellites/predictions', {
+      '/api/predictions', {
         params: params,
       }).then((res) => res.data),
     staleTime: Infinity,

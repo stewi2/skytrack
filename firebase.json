@@ -1,0 +1,78 @@
+{
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/satellites",
+        "function": {
+          "functionId": "satellites",
+          "region": "us-central1",
+          "pinTag": true
+        }
+      },
+      {
+        "source": "/api/passes",
+        "function": {
+          "functionId": "passes",
+          "region": "us-central1",
+          "pinTag": true
+        }
+      },
+      {
+        "source": "/api/pass_details",
+        "function": {
+          "functionId": "pass_details",
+          "region": "us-central1",
+          "pinTag": true
+        }
+      },
+      {
+        "source": "/api/predictions",
+        "function": {
+          "functionId": "predictions",
+          "region": "us-central1",
+          "pinTag": true
+        }
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 5002
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true,
+    "pubsub": {
+      "port": 8085
+    }
+  }
+}

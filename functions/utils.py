@@ -68,7 +68,7 @@ def event_data(t, event, satellite, eph, difference, tod):
 
 def get_all_groups() -> list[str]:
     update_tle()
-    return satellites.keys()
+    return list(satellites.keys())
 
 def get_all_satellites(group: str) -> list[EarthSatellite]:
     update_tle()

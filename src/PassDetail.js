@@ -10,7 +10,10 @@ function passDetailLoader({ params }) {
   };
 
   return axios.get(
-    `/api/satellites/${params.satid}/passes/${params.range}`, { params: {
+    `/api/pass_details`, { params: {
+      id: params.satid,
+      start: params.range.split('-')[0],
+      end: params.range.split('-')[1],
       lat: initialValues.latitude,
       lon: initialValues.longitude,
       alt: initialValues.altitude,

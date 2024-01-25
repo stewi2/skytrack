@@ -1,8 +1,0 @@
-services:
-  app:
-    platform: linux/arm64/v8
-    build: .
-    image: skytrack
-    restart: on-failure
-    ports:
-      - "8080:8080"

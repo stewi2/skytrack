@@ -11,7 +11,8 @@ function detailLoader({ params }) {
   };
 
   return axios.get(
-    `/api/satellites/${params.satid}/passes`,{ params: {
+    `/api/passes`,{ params: {
+      id: params.satid,
       lat: initialValues.latitude,
       lon: initialValues.longitude,
       alt: initialValues.altitude,
